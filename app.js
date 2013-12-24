@@ -3,7 +3,7 @@ var imageData;
 var gif;
 var colArray = new Array();
 var img = new Image();
-img.src = "lenna.png";
+img.src = "bird.jpg";
 canvas = document.createElement('canvas');
 ctx = canvas.getContext('2d');
 
