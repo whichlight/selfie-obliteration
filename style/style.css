@@ -26,3 +26,12 @@
   position: absolute;
 }
 
+.ui-widget-header{
+    background: yellow;
+    border:none;
+}
+
+.ui-widget-content{
+    border: none;
+    background: none;
+}

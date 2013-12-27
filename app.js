@@ -183,12 +183,12 @@ var initCam = function(){
         video.style.width = width*2 + 'px';
         video.style.height = height*2 + 'px';
         video.play();
+
         (function draw() {
             ctx.save();
-
             ctx.translate(width, 0);
             ctx.scale(-1, 1);
-            ctx.drawImage(video, 0, 0, width, height);
+            drawVideo();
             ctx.restore();
             drawing = requestAnimationFrame(draw);
         })();
@@ -201,6 +201,19 @@ var initCam = function(){
       }
       );
 
+}
+
+//because of weird ffx bug
+var drawVideo = function(){
+  try {
+    ctx.drawImage(video, 0, 0, width, height);
+  } catch (e) {
+    if (e.name == "NS_ERROR_NOT_AVAILABLE") {
+      setTimeout(drawVideo, 0);
+    } else {
+      throw e;
+    }
+  }
 }
 
 
