@@ -5,6 +5,10 @@
 #container{
   width:440;
   margin:0px auto;
+  background-color:white;
+  padding:10px;
+  opacity:1.0;
+  border: 10px solid yellow;
 }
 
 .button{
@@ -21,3 +25,4 @@
   bottom:10px;
   position: absolute;
 }
+

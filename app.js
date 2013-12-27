@@ -7,7 +7,9 @@ img.src = "cat.gif";
 $("#image").append(img);
 img.width=440;
 img.height=440/1.333;
-var video  = document.querySelector('#video');
+
+var video  = document.createElement('video');
+video.id="video";
 var gifblob;
 
 var streaming = false;
@@ -43,15 +45,16 @@ var setup_img = function(){
     $("#image").append(save);
     $("#description").text("You can keep this if you like. Happy new year.");
   });
-
   imageData = ctx.getImageData(0, 0, width, height);
   for(var i=0; i<(imageData.data.length/4); i++){
     colArray[i] = imageData.data.subarray(4*i, (4*i)+4);
   }
-  addGifFrame();
 
   $("#description").text("");
-  sortPixels();
+  addGifFrame();
+
+
+
 }
 
 var sortPixels = function(){
@@ -116,19 +119,18 @@ var writeToCanvas = function(){
   }
 
 var sortIteration = 0;
-var num_frames = 10;
+var num_frames = 30;
 var frame =0;
 
 var addGifFrame = function(){
-  frame++;
   if(frame < num_frames){
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "yellow";
     ctx.font = "8px Helvetica";
-    ctx.globalAlpha = 0.3;
+    ctx.globalAlpha = 0.2;
     ctx.fillText("WHICHLIGHT",165, 161);
 
 
-    ctx.fillStyle = "red";
+    ctx.fillStyle = "yellow";
     ctx.font = "8px Helvetica";
     ctx.globalAlpha = 0.5;
     ctx.fillText("SELFIE OBLITERATION",3, 161);
@@ -146,6 +148,8 @@ $( "#progressbar" ).progressbar({
       value: Math.round(frame/num_frames * 100)
     });
 
+
+  frame++;
 }
 
 var initCam = function(){
@@ -165,6 +169,8 @@ var initCam = function(){
       audio: false
     },
       function(stream) {
+
+   $("#image").append(canvas);
         $("#description").text("This one will disintegrate.");
         $("#container").append(snap);
         if (navigator.mozGetUserMedia) {
@@ -173,12 +179,25 @@ var initCam = function(){
           var vendorURL = window.URL || window.webkitURL;
           video.src = vendorURL ? vendorURL.createObjectURL(stream) : stream;
         }
+
         video.style.width = width*2 + 'px';
         video.style.height = height*2 + 'px';
         video.play();
+        (function draw() {
+            ctx.save();
+
+            ctx.translate(width, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(video, 0, 0, width, height);
+            ctx.restore();
+            drawing = requestAnimationFrame(draw);
+        })();
+
+
       },
       function(err) {
         console.log("An error occured! " + err);
+        alert("Oops! Some sort of error occured, refresh and try again.");
       }
       );
 
@@ -186,8 +205,7 @@ var initCam = function(){
 
 
 takepicture = function() {
-    ctx.save();
-    ctx.drawImage(video, 0, 0, width, height);
+   cancelAnimationFrame(drawing);
    $(video).remove();
    $("#image").append(canvas);
    setup_img();
