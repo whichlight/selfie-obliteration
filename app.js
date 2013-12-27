@@ -228,6 +228,7 @@ takepicture = function() {
 $("#startCam").click(function(){
   initCam();
   $("#startCam").remove();
+  $("#info").remove();
   $("#description").text("Allow access to the webcam to take the selfie.");
 });
 

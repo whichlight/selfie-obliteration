@@ -19,11 +19,13 @@
 #me, #me a{
  color:yellow;
  text-decoration:none;
+ float:right;
 }
 
 #info{
   bottom:10px;
   position: absolute;
+  color:gray;
 }
 
 .ui-widget-header{
