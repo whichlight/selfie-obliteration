@@ -5,4 +5,4 @@ selfie obliteration
 
 Takes a pic with the web cam, pixel sort it, and produce a gif.
 
-uses gif.js, filesaver.js, webrtc
+uses gif.js, filesaver.js, webrtc, and webworkers to sort faster.
