@@ -3,20 +3,27 @@ var imageData;
 var gif;
 var colArray = new Array();
 var img = new Image();
-img.src = "bird.jpg";
+img.src = "cat.gif";
+$("#image").append(img);
+img.width=440;
+img.height=440/1.333;
+var video  = document.querySelector('#video');
+var gifblob;
+
+var streaming = false;
+width = 220;
+height = Math.floor(width/1.33);
 canvas = document.createElement('canvas');
 ctx = canvas.getContext('2d');
+canvas.width = width;
+canvas.height = height;
+$(canvas).css("width",width*2);
+$(canvas).css("height",height*2);
 
-img.onload = function(){
-  width = canvas.width = img.naturalWidth;
-  height = canvas.height = img.naturalHeight;
-  $("body").append(canvas);
-  setup_img();
-}
 
 var setup_img = function(){
   gif = new GIF({
-      workers: 4,
+    workers: 4,
       quality: 10,
       width: width,
       height: height,
@@ -24,33 +31,39 @@ var setup_img = function(){
   });
 
   gif.on('finished', function(blob){
-      var gifimg = document.createElement('img');
-      gifimg.id = 'result';
-      gifimg.src = URL.createObjectURL(blob);
-      $("canvas").remove();
-      $("body").append(gifimg);
+    var gifimg = document.createElement('img');
+    gifimg.id = 'result';
+    gifimg.src = URL.createObjectURL(blob);
+    gifimg.width=width*2;
+    gifimg.height=height*2;
+    gifblob = blob;
+    $("canvas").remove();
+    $("#image").append(gifimg);
+    $( "#progressbar" ).remove();
+    $("#image").append(save);
+    $("#description").text("You can keep this if you like. Happy new year.");
   });
 
-  ctx.drawImage(img, 0, 0);
   imageData = ctx.getImageData(0, 0, width, height);
   for(var i=0; i<(imageData.data.length/4); i++){
     colArray[i] = imageData.data.subarray(4*i, (4*i)+4);
   }
-  gif.addFrame(ctx, {copy: true, delay:150});
+  addGifFrame();
+
+  $("#description").text("");
   sortPixels();
 }
 
 var sortPixels = function(){
   var workersCount = 4;
   var finished = 0;
-  var blockSize = height/workersCount;
+  var blockSize = Math.floor(height/workersCount);
   var cycles = 20;
 
   //get finished ones
   var onWorkEnded = function(e){
     var blockResult = e.data.result;
     var index = e.data.index;
-
     var start = index*(blockSize);
     var end = start+(blockSize);
 
@@ -73,7 +86,6 @@ var sortPixels = function(){
     var start = index*(blockSize);
     var end = start+(blockSize);
     var segmentBlock = colArray.slice(start*width, start*width+ blockSize*width);
-    console.log(segmentBlock.length);
     worker.postMessage({
       data: segmentBlock,
       index:index,
@@ -101,39 +113,108 @@ var writeToCanvas = function(){
     imageData.data[4*i+3]=colArray[i][3];
   }
   ctx.putImageData(imageData,0,0);
-}
+  }
 
 var sortIteration = 0;
-
-/**
-var sortProcess = setInterval(function(){
-  sortPixels();
-  sortIteration++;
-
-  if(sortIteration%10==0){
-   ctx.putImageData(imageData,0,0);
-  }
-
-  if(sortIteration%20==0){
-   addGifFrame();
-  }
-
-},10);
-**/
-
-var num_frames = 30;
+var num_frames = 10;
 var frame =0;
+
 var addGifFrame = function(){
   frame++;
   if(frame < num_frames){
+    ctx.fillStyle = "white";
+    ctx.font = "8px Helvetica";
+    ctx.globalAlpha = 0.3;
+    ctx.fillText("WHICHLIGHT",165, 161);
+
+
+    ctx.fillStyle = "red";
+    ctx.font = "8px Helvetica";
+    ctx.globalAlpha = 0.5;
+    ctx.fillText("SELFIE OBLITERATION",3, 161);
+
+
+
     gif.addFrame(ctx, {copy: true, delay:150});
     sortPixels();
   }
   else{
     gif.render();
   }
+
+$( "#progressbar" ).progressbar({
+      value: Math.round(frame/num_frames * 100)
+    });
+
+}
+
+var initCam = function(){
+  $(img).remove();
+  navigator.getMedia = ( navigator.getUserMedia ||
+      navigator.webkitGetUserMedia ||
+      navigator.mozGetUserMedia ||
+      navigator.msGetUserMedia);
+
+  if(navigator.getMedia == "undefined"){
+     alert("webrtc is not supported on this browser. try chrome or firefox.");
+  }
+
+  navigator.getMedia(
+    {
+      video: true,
+      audio: false
+    },
+      function(stream) {
+        $("#description").text("This one will disintegrate.");
+        $("#container").append(snap);
+        if (navigator.mozGetUserMedia) {
+          video.mozSrcObject = stream;
+        } else {
+          var vendorURL = window.URL || window.webkitURL;
+          video.src = vendorURL ? vendorURL.createObjectURL(stream) : stream;
+        }
+        video.style.width = width*2 + 'px';
+        video.style.height = height*2 + 'px';
+        video.play();
+      },
+      function(err) {
+        console.log("An error occured! " + err);
+      }
+      );
+
 }
 
 
+takepicture = function() {
+    ctx.save();
+    ctx.drawImage(video, 0, 0, width, height);
+   $(video).remove();
+   $("#image").append(canvas);
+   setup_img();
+  }
+
+
+$("#startCam").click(function(){
+  initCam();
+  $("#startCam").remove();
+  $("#description").text("Allow access to the webcam to take the selfie.");
+});
+
+var snap = document.createElement('a');
+snap.href="#";
+$(snap).addClass("button");
+$(snap).text("capture photo");
+$(snap).click(function(){
+  takepicture();
+  $(snap).remove();
+})
+
+var save = document.createElement('a');
+save.href="#";
+$(save).addClass("button");
+$(save).text("save this gif");
+$(save).click(function(){
+  saveAs(gifblob, 'selfie-obliteration.gif');
+});
 
 

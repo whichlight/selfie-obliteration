@@ -11,10 +11,14 @@ self.onmessage = function(e){
     for(var j=0; j<height; j++){
       for(var i=Math.round(Math.random()); i<width-1; i+=2){
 
-       if(typeof(colorBlock[j*width+i])=="undefined"){console.log(j*width+i)
-       console.log(colorBlock[j*width+i]);
-       }
-       sortFxn(j*width+i,j*width+i+1, brightSort, colorBlock);
+        if(typeof(colorBlock[j*width+i])=="undefined"){
+          console.log(height);
+          console.log(index);
+          console.log("undefine check");
+          console.log(j*width+i);
+          console.log(colorBlock[j*width+i]);
+        }
+        sortFxn(j*width+i,j*width+i+1, brightSort, colorBlock);
       }
     }
   }

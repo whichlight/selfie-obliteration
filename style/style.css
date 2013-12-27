@@ -1,0 +1,23 @@
+#progressbar{
+  width: 440;
+}
+
+#container{
+  width:440;
+  margin:0px auto;
+}
+
+.button{
+  background-color:yellow;
+  text-decoration:none;
+}
+
+#me, #me a{
+ color:yellow;
+ text-decoration:none;
+}
+
+#info{
+  bottom:10px;
+  position: absolute;
+}
