@@ -3,7 +3,7 @@ var imageData;
 var gif;
 var colArray = new Array();
 var img = new Image();
-img.src = "cat.gif";
+img.src = "obama.gif";
 $("#image").append(img);
 img.width=440;
 img.height=440/1.333;
