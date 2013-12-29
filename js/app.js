@@ -146,11 +146,9 @@ var addGifFrame = function(){
     gif.render();
   }
 
-$( "#progressbar" ).progressbar({
-      value: Math.round(frame/num_frames * 100)
-    });
-
-
+  $( "#progressbar" ).progressbar({
+    value: Math.round(frame/num_frames * 100)
+  });
   frame++;
 }
 
