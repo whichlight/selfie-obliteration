@@ -3,7 +3,7 @@ var imageData;
 var gif;
 var colArray = new Array();
 var img = new Image();
-img.src = "obama.gif";
+img.src = "img/obama.gif";
 $("#image").append(img);
 img.width=440;
 img.height=440/1.333;
@@ -45,6 +45,8 @@ var setup_img = function(){
     $("#image").append(save);
     $("#description").text("You can keep this if you like. Happy new year.");
   });
+
+//  ctx.drawImage(img, 0, 0, width, height);
   imageData = ctx.getImageData(0, 0, width, height);
   for(var i=0; i<(imageData.data.length/4); i++){
     colArray[i] = imageData.data.subarray(4*i, (4*i)+4);
