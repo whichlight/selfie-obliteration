@@ -3,7 +3,7 @@ var imageData;
 var gif;
 var colArray = new Array();
 var img = new Image();
-img.src = "img/obama.gif";
+img.src = "../img/obama.gif";
 $("#image").append(img);
 img.width=440;
 img.height=440/1.333;
@@ -29,7 +29,7 @@ var setup_img = function(){
       quality: 10,
       width: width,
       height: height,
-      workerScript: 'libs/gif.worker.js'
+      workerScript: '../libs/gif.worker.js'
   });
 
   gif.on('finished', function(blob){
@@ -86,7 +86,7 @@ var sortPixels = function(){
   };
 
   for (var index = 0; index < workersCount; index++){
-    var worker = new Worker('sortProcessor.js');
+    var worker = new Worker('js/sortProcessor.js');
     worker.onmessage = onWorkEnded;
     var start = index*(blockSize);
     var end = start+(blockSize);
