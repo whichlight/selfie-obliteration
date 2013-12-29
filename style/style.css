@@ -9,11 +9,13 @@
   padding:10px;
   opacity:1.0;
   border: 10px solid yellow;
+  padding-bottom:25px;
 }
 
 .button{
   background-color:yellow;
   text-decoration:none;
+  float:left;
 }
 
 #me, #me a{
@@ -23,9 +25,10 @@
 }
 
 #info{
-  bottom:10px;
-  position: absolute;
+  padding-top:50px;
   color:gray;
+  width:440;
+  margin:0px auto;
 }
 
 .ui-widget-header{
@@ -36,4 +39,12 @@
 .ui-widget-content{
     border: none;
     background: none;
+}
+
+#submit{
+float:right;
+}
+
+#startCam{
+  float:left;
 }
